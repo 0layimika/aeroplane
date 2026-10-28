@@ -940,6 +940,9 @@ async function createServiceRecord(projectId: string, environmentId: string, inp
   const isFunction = isFunctionService({ repoFullName, repoUrl });
   const dbType = isDatabase ? databaseTypeForService({ repoFullName, repoUrl }) : "";
   const externalUrl = input.databaseConnectionUrl;
+  if (isDatabase && isPostgresFamilyDatabase(dbType) && !externalUrl && !input.env.some((entry) => entry.key === "POSTGRES_PASSWORD" && entry.value.trim())) {
+    throw new Error("Set POSTGRES_PASSWORD to create a new PostgreSQL database. To connect an existing database, choose Connect an existing database and enter its connection URL.");
+  }
   if (externalUrl) {
     if (!isDatabase || !["postgres", "postgis"].includes(dbType)) throw new Error("Existing connections are supported for PostgreSQL services only.");
     parseExternalPostgresUrl(externalUrl);
