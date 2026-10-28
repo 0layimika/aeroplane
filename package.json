@@ -4,6 +4,8 @@
   "description": "Aeroplane is a self-hostable deployment control plane powered by Railpack, Docker, and Caddy.",
   "type": "module",
   "scripts": {
+    "test": "node --import tsx --test tests/*.test.ts",
+    "test:postgis:integration": "AEROPLANE_TEST_DOCKER=1 node --import tsx --test tests/postgis-integration.test.ts",
     "dev": "concurrently -k -n api,web -c cyan,magenta \"npm:dev:server\" \"npm:dev:client\"",
     "dev:server": "tsx watch src/server/index.ts",
     "dev:client": "vite --host 0.0.0.0",
